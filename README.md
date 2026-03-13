@@ -1,2 +1,0 @@
-# csos
-OS from scratch
