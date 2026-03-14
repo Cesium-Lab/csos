@@ -10,6 +10,7 @@ SIZE    = arm-none-eabi-size
 TARGET  = hello
 
 SRC     = main.c \
+		  hal/device-drivers/clock.c \
 		  hal/device-drivers/gpio.c \
 		  startup.s
 
@@ -51,6 +52,9 @@ clean:
 # Flash binary
 flash: $(BUILD_DIR)/$(TARGET).bin
 	st-flash write $(BUILD_DIR)/$(TARGET).bin 0x08000000
+	st-flash reset
+
+reset:
 	st-flash reset
 
 run: all flash

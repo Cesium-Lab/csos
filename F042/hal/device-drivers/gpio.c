@@ -10,106 +10,129 @@ Reference:
 
 #define PULLDOWN_WAITTIME 150 // cycles
 
-int gpio_set_output(uint32_t port, uint32_t pin) {
-    // p. 144
+int pin_valid(uint32_t port, uint32_t pin) {
+    
+    // Handles ports A and B
+    if (port <= GPIO_PORTB)
+        if (pin <= PB15) // Could also use PA15
+            return 1;
 
-    // if(port > GPIO_PORTC)
-    //     return 0;
-    if(pin > GPIO_MAX_PIN)
-        return 0;
+    // Handles port F
+    if (port == GPIO_PORTF)
+        if (pin <= PF1)
+            return 1;
+    
+    return -1;
+}
+
+// ****************************************************************************************************
+//                  Setup
+// ****************************************************************************************************
+
+// int gpio_init(uint32_t port) {
+//     switch (port) {
+//         case GPIO_PORTA:
+//             clock_enable(port)
+//             return 1;
+//     }
+
+
+//     if (port <= GPIO_PORTB || port == GPIO_PORTF)
+//         clock_enable(port)
+// }
+
+int gpio_set_mode(uint32_t port, uint32_t pin, uint32_t mode) {
+    // RM p. 158
+    if (pin_valid(port, pin) < 0) return -1;
+    if (mode & ~0b11) return -1; // Must be only in the lowest 2 bits
+        
 
     // Each port is spaced out by 0x400
-     uint32_t addr = (uint32_t)GPIOA_MODER + (GPIO_PORT_STRIDE * port);
-    //  uint32_t addr = (uint32_t)GPIOB_MODER;
-     uint32_t mask_n = 0b11 << (pin*2);
-     uint32_t value = GET32(addr);
+    uint32_t addr = (uint32_t)GPIOA_MODER + (GPIO_PORT_STRIDE * port);
+    uint32_t mask_n = 0b11 << (pin*2);
+    uint32_t value = GET32(addr);
 
     value &= ~mask_n;
-    value |= 0b01 << (pin*2);
+    value |= mode << (pin*2);
 
     PUT32(addr, value);
 
     return 1;
 }
 
-// // Set GPIO <pin> = on.
-// int gpio_set_on(uint32_t port, uint32_t pin) {
-//     if(port > GPIO_PORTC)
-//         return 0;
-//     if(pin > GPIO_MAX_PIN)
-//         return 0;
+int gpio_set_output(uint32_t port, uint32_t pin) {
+    return gpio_set_mode(port, pin, GPIO_PIN_MODE_OUTPUT);
+}
+int gpio_set_input(uint32_t port, uint32_t pin) {
+    return gpio_set_mode(port, pin, GPIO_PIN_MODE_INPUT);
+}
+int gpio_set_analog(uint32_t port, uint32_t pin) {
+    return gpio_set_mode(port, pin, GPIO_PIN_MODE_ANALOG);
+}
 
-//     volatile uint32_t addr = (uint32_t)GPIOA_MODER + (0x400 * port);
-//     volatile uint32_t mask_n = 0b11 << pin;
-//     volatile uint32_t value = get32(addr);
+int gpio_set_alt(uint32_t port, uint32_t pin, uint32_t alt_function) {
+    // RM p. 162
+    if (pin_valid(port, pin) < 0) return -1;
+    if (alt_function > 0b0111) return -1;
 
-//     volatile uint32_t* gpio_addr = (uint32_t*) gpio_set0 + (pin / 32);
-//     put32(gpio_addr, 1 << (pin % 32));
+    // Pin validity already handled above
+    gpio_set_mode(port, pin, GPIO_PIN_MODE_ALT);
 
-//     return 1;
-// }
+    uint32_t afr_off = (pin < 8) ? 0x20 : 0x24; // AFRL or AFRH offset from GPIOx base
+    uint32_t addr = GPIOA_BASE + GPIO_PORT_STRIDE * port + afr_off;
 
-// // Set GPIO <pin> = off
-// int gpio_set_off(uint32_t pin) {
-//     if(port > GPIO_PORTC)
-//         return 0;
-//     if(pin > GPIO_MAX_PIN)
-//         return 0;
+    uint32_t mask_n = 0b1111 << ( (pin % 8) * 4);
+    uint32_t value = GET32(addr);
 
-//     // Implement this. 
-//     // NOTE: 
-//     //  - If you want to be slick, you can exploit the fact that 
-//     //    SET0/SET1 are contiguous in memory.
-//     volatile uint32_t addr = (uint32_t)GPIOA_MODER + (0x400 * port);
-//     volatile uint32_t mask_n = 0b11 << pin;
-//     volatile uint32_t value = get32(addr);
+    value &= ~mask_n;
+    value |= alt_function << ( (pin % 8) * 4);
 
-//     return 1;
-// }
+    PUT32(addr, value);
 
-// // Set <pin> to <v> (v \in {0,1})
-// int gpio_write(uint32_t pin, uint32_t v) {
-//     if(v)
-//         gpio_set_on(pin);
-//     else
-//         gpio_set_off(pin);
-// }
+    return 1;
+}
 
-// //
-// // Part 2: implement gpio_set_input and gpio_read
-// //
+// ****************************************************************************************************
+//                  IO
+// ****************************************************************************************************
 
-// // set <pin> = input.
-// int gpio_set_input(uint32_t pin) {
-//     if(pin > GPIO_MAX_PIN)
-//         gpio_panic("illegal pin=%d\n", pin);
+int gpio_write(uint32_t port, uint32_t pin, uint32_t v) {
+    // RM p. 161
+    if(pin_valid(port, pin) < 0) return -1;
 
-//     // Implement.
-//     volatile uint32_t* gpio_addr = (uint32_t*) gpio_set0 + (pin / 10);
-//     volatile uint32_t mask_n = 0b111 << (3 * (pin % 10));
-//     volatile uint32_t value = get32(gpio_addr);
+    uint32_t addr = (uint32_t)GPIOA_BSRR + (0x400 * port);
 
-//     value &= ~mask_n;
-//     // value |= 0b000 << (3 * (pin % 10)); don't need to set them for input
+    // Shifted to higher 16 bits if turning OFF
+    uint32_t val = 1 << (pin + (!v)*16);
+    PUT32(addr, val);
 
-//     put32(gpio_addr, value);
-// }
+    return 1;
+}
 
-// // Return 1 if <pin> is on, 0 if not.
-// int gpio_read(uint32_t pin) {
-//     if(pin > GPIO_MAX_PIN)
-//         gpio_panic("illegal pin=%d\n", pin);
+int gpio_write_on(uint32_t port, uint32_t pin) {
+    // RM p. 161
+    return gpio_write(port, pin, 1);
+}
 
-//     volatile uint32_t* gpio_addr = (uint32_t*) gpio_lev0 + (pin / 32);
-//     volatile uint32_t value = get32(gpio_addr);
+int gpio_write_off(uint32_t port, uint32_t pin) {
+    // RM p. 161
+    return gpio_write(port, pin, 0);
+}
 
-//     return (value >> (pin % 32)) & 0b1;
-// }
+int gpio_read(uint32_t port, uint32_t pin) {
+    // RM p. 161
+    if(pin_valid(port, pin < 0)) return -1;
 
+    uint32_t addr = (uint32_t)GPIOA_IDR + (0x400 * port);
 
-//
-// Part 3: implement gpio_set_pullup and gpio_set_pulldown
-//
+    // Shifted to higher 16 bits if turning OFF
+    uint32_t value = GET32(addr);
+    return (value >> pin) & 0b1;
+}
+
+// ****************************************************************************************************
+//              Pullup/pulldown TODO
+// ****************************************************************************************************
 
 // int gpio_set_pullup(uint32_t pin) {
 //     if(pin > GPIO_MAX_PIN)

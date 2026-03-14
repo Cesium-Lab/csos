@@ -106,11 +106,11 @@ ZeroBSSDone:
 
     /* ------------------ ENABLE GPIO CLOCKS ------------------ */
     /* RCC_AHBENR address: 0x40021014 */
-    ldr   r0, =0x40021014      /* RCC_AHBENR */
-    ldr   r1, [r0]
-    ldr   r2, =(1<<18)         /* IOPBEN (GPIOB) */
-    orrs  r1, r1, r2
-    str   r1, [r0]
+    @ ldr   r0, =0x40021014      /* RCC_AHBENR */
+    @ ldr   r1, [r0]
+    @ ldr   r2, =(1<<18)         /* IOPBEN (GPIOB) */
+    @ orrs  r1, r1, r2
+    @ str   r1, [r0]
     /* Optional: Minimal SysTick setup here if needed */
 
     /* ------------------ CALL MAIN ------------------ */
@@ -228,3 +228,12 @@ get32:
 GET32:
     ldr r0,[r0]     @ load address held in r0 into r0
     bx lr           @ return
+
+
+@ .global PUT32CHK
+@ .type PUT32CHK, %function
+@ .thumb_func
+@ put32chk
+@ PUT32CHK:
+@     ldr r0,[r0]     @ load address held in r0 into r0
+@     bx lr           @ return

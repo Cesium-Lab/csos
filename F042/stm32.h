@@ -4,15 +4,22 @@
 #include <stdint.h>
 
 #include "gpio.h"
+#include "clock.h"
+
+
+// Is this a valid pin on the specific MCU package?
+int pin_valid(uint32_t port, uint32_t pin);
 
 // ****************************************************************************************************
 //                  Lowest level (defined in startup.s)
 // ****************************************************************************************************
 
 void PUT32(uint32_t addr, uint32_t v);
-void put32(volatile void *addr, uint32_t v);
+void put32(const volatile void *addr, uint32_t v);
 
-// *(uint32_t *)addr
+// void put32chk(const volatile void* addr, uint32_t v);
+// void PUT32CHK(uint32_t addr, uint32_t v);
+
 uint32_t GET32(uint32_t addr);
 uint32_t get32(const volatile void *addr);
 

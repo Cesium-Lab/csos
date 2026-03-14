@@ -7,31 +7,36 @@ void delay(int count) {
     while(count--) { __asm("nop"); }
 }
 
-#define PB3          3
+// Write 1 to state for on, 0 for off
+// void clock_enable(uint32_t reg, uint32_t clock, uint32_t state) {
+//     uint32_t value;
+
+//     value = GET32(reg);
+
+//     if (state)
+//         value |= clock;
+//     else
+//         value &= ~clock;
+
+//     PUT32(reg, value);
+// }
 
 int main(void) {
-    uint32_t reg;
-
     // 1) Enable GPIOB clock
-    reg = GET32(RCC_AHBENR);
-    reg |= RCC_AHBENR_IOPBEN;
-    PUT32(RCC_AHBENR, reg);
+    // uint32_t reg = GET32(RCC_AHBENR);
+    // reg |= RCC_AHB_B_EN;
+    // PUT32(RCC_AHBENR, reg);
 
-    // 2) Configure PB0 as output (MODER0 = 01)
-    reg = GET32(GPIOB_MODER);
-    // reg &= ~(0x3 << (PB3 * 2));     // clear MODER0[1:0]
-    // reg |=  (0x1 << (PB3 * 2));     // set to output
-    // PUT32(GPIOB_MODER, reg);
+    clock_enable(RCC_AHBENR, RCC_AHB_B_EN, 1);
 
-    gpio_set_output(GPIO_PORTB, 3);
-
+    // gpio_set_output(GPIO_PORTB, 3);
+    if (gpio_set_output(GPIO_PORTB, 3) < 0)    
+        return 0;
 
     while(1) {
-        // try LED ON as PB3 LOW (active-low)
-        PUT32(GPIOB_BSRR, (1u << (PB3 + 16))); // reset PB3 (drive low)
+        gpio_write_off(GPIO_PORTB, PB3);
         delay(500000);
-
-        PUT32(GPIOB_BSRR, (1u << PB3));        // set PB3 (drive high)
+        gpio_write_on(GPIO_PORTB, PB3);
         delay(200000);
     }
 }

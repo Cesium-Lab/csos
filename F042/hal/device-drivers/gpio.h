@@ -1,11 +1,8 @@
 #ifndef __GPIO_H__
 #define __GPIO_H__
-/*
-Section 8 p. 125-140
-Reference:
-    https://www.st.com/resource/en/reference_manual/rm0360-stm32f030x4x6x8xc-and-stm32f070x6xb-advanced-armbased-32bit-mcus-stmicroelectronics.pdf
-*/
+// Reference Mannual Section 8 p.149-165 
 
+// TODO: CHECK THESE FUNCTIONS AND PULLUP/PULLDOWN
 
 #include "stm32f042-pins.h"
 
@@ -19,27 +16,40 @@ enum {
 //                  Setup
 // ****************************************************************************************************
 
-// Configure GPIO <pin> as an output pin.
+// Basically just turns on the clock, but for a port
+int gpio_init(uint32_t port);
+
+// Configure GPIO <pin> mode (Input, Output, Alt, Analog). Returns -1 if invalid pin/port
+int gpio_set_mode(uint32_t port, uint32_t pin, uint32_t mode);
+
+// Configure GPIO <pin> as an output pin. Returns -1 if invalid pin/port
 int gpio_set_output(uint32_t port, uint32_t pin);
 
-// Configure GPIO <pin> as an input pin.
+// Configure GPIO <pin> as an input pin. Returns -1 if invalid pin/port
 int gpio_set_input(uint32_t port, uint32_t pin);
+
+// Configure GPIO <pin> as an alternate pin with function. Returns -1 if invalid pin/port
+int gpio_set_alt(uint32_t port, uint32_t pin, uint32_t alt_function);
+
+
+// Configure GPIO <pin> as an analog pin. Returns -1 if invalid pin/port
+int gpio_set_analog(uint32_t port, uint32_t pin);
 
 // ****************************************************************************************************
 //                  IO
 // ****************************************************************************************************
 
-// Set GPIO <pin> on.
-int gpio_set_on(uint32_t port, uint32_t pin);
+// Set GPIO <pin> on. Returns -1 if invalid pin/port
+int gpio_write_on(uint32_t port, uint32_t pin);
 
-// Set GPIO<pin> off.
-int gpio_set_off(uint32_t port, uint32_t pin);
+// Set GPIO<pin> off. Returns -1 if invalid pin/port
+int gpio_write_off(uint32_t port, uint32_t pin);
 
-// Set GPIO <pin> to <v>.
+// Set GPIO <pin> to <v>. On for v > 0. Returns -1 if invalid pin/port
 int gpio_write(uint32_t port, uint32_t pin, uint32_t v);
 
 // Read the current value of GPIO <pin>.
-// Returns either 0 or 1.
+// Returns value, or -1 if invalid pin/port
 int gpio_read(uint32_t port, uint32_t pin);
 
 // ****************************************************************************************************
