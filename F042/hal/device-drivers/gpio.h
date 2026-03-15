@@ -3,6 +3,7 @@
 // Reference Mannual Section 8 p.149-165 
 
 // TODO: CHECK THESE FUNCTIONS AND PULLUP/PULLDOWN
+// TODO: HANDLE SPEED FOR DEVICES
 
 #include "stm32f042-pins.h"
 

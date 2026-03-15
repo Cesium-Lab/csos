@@ -40,57 +40,57 @@ Reference:
 // **************************************************
 
 // RM 140-141
-#define MODER_OFFSET   0x00   // GPIO Port mode
-#define OTYPER_OFFSET  0x04   // GPIO Output type
-#define OSPEEDR_OFFSET 0x08   // GPIO Output speed
-#define PUPDR_OFFSET   0x0C   // GPIO Pull-up/pull-down
-#define IDR_OFFSET     0x10   // GPIO Input data
-#define ODR_OFFSET     0x14   // GPIO Output data
-#define BSRR_OFFSET    0x18   // GPIO Bit set/reset
-#define AFRL_OFFSET    0x20   // GPIO Alternate Function High
-#define AFTH_OFFSET    0x24   // GPIO Alternate Function Low
+#define GPIO_MODER_OFFSET   0x00   // GPIO Port mode
+#define GPIO_OTYPER_OFFSET  0x04   // GPIO Output type
+#define GPIO_OSPEEDR_OFFSET 0x08   // GPIO Output speed
+#define GPIO_PUPDR_OFFSET   0x0C   // GPIO Pull-up/pull-down
+#define GPIO_IDR_OFFSET     0x10   // GPIO Input data
+#define GPIO_ODR_OFFSET     0x14   // GPIO Output data
+#define GPIO_BSRR_OFFSET    0x18   // GPIO Bit set/reset
+#define GPIO_AFRL_OFFSET    0x20   // GPIO Alternate Function High
+#define GPIO_AFRH_OFFSET    0x24   // GPIO Alternate Function Low
 
 // **************************************************
 //      Port A Registers
 // **************************************************
 
-#define GPIOA_MODER    (GPIOA_BASE + MODER_OFFSET)
-#define GPIOA_OTYPER   (GPIOA_BASE + OTYPER_OFFSET)
-#define GPIOA_OSPEEDR  (GPIOA_BASE + OSPEEDR_OFFSET)
-#define GPIOA_PUPDR    (GPIOA_BASE + PUPDR_OFFSET)
-#define GPIOA_IDR      (GPIOA_BASE + IDR_OFFSET)
-#define GPIOA_ODR      (GPIOA_BASE + ODR_OFFSET)
-#define GPIOA_BSRR     (GPIOA_BASE + BSRR_OFFSET)
-#define GPIOA_AFRL     (GPIOA_BASE + AFLR_OFFSET)
-#define GPIOA_AFRH     (GPIOA_BASE + AFLH_OFFSET)
+#define GPIOA_MODER    (GPIOA_BASE + GPIO_MODER_OFFSET)
+#define GPIOA_OTYPER   (GPIOA_BASE + GPIO_OTYPER_OFFSET)
+#define GPIOA_OSPEEDR  (GPIOA_BASE + GPIO_OSPEEDR_OFFSET)
+#define GPIOA_PUPDR    (GPIOA_BASE + GPIO_PUPDR_OFFSET)
+#define GPIOA_IDR      (GPIOA_BASE + GPIO_IDR_OFFSET)
+#define GPIOA_ODR      (GPIOA_BASE + GPIO_ODR_OFFSET)
+#define GPIOA_BSRR     (GPIOA_BASE + GPIO_BSRR_OFFSET)
+#define GPIOA_AFRL     (GPIOA_BASE + GPIO_AFRL_OFFSET)
+#define GPIOA_AFRH     (GPIOA_BASE + GPIO_AFRH_OFFSET)
 
 // **************************************************
 //      Port B Registers
 // **************************************************
 
-#define GPIOB_MODER    (GPIOB_BASE + MODER_OFFSET)
-#define GPIOB_OTYPER   (GPIOB_BASE + OTYPER_OFFSET)
-#define GPIOB_OSPEEDR  (GPIOB_BASE + OSPEEDR_OFFSET)
-#define GPIOB_PUPDR    (GPIOB_BASE + PUPDR_OFFSET)
-#define GPIOB_IDR      (GPIOB_BASE + IDR_OFFSET)
-#define GPIOB_ODR      (GPIOB_BASE + ODR_OFFSET)
-#define GPIOB_BSRR     (GPIOB_BASE + BSRR_OFFSET)
-#define GPIOB_AFRL     (GPIOB_BASE + AFLR_OFFSET)
-#define GPIOB_AFRH     (GPIOB_BASE + AFLH_OFFSET)
+#define GPIOB_MODER    (GPIOB_BASE + GPIO_MODER_OFFSET)
+#define GPIOB_OTYPER   (GPIOB_BASE + GPIO_OTYPER_OFFSET)
+#define GPIOB_OSPEEDR  (GPIOB_BASE + GPIO_OSPEEDR_OFFSET)
+#define GPIOB_PUPDR    (GPIOB_BASE + GPIO_PUPDR_OFFSET)
+#define GPIOB_IDR      (GPIOB_BASE + GPIO_IDR_OFFSET)
+#define GPIOB_ODR      (GPIOB_BASE + GPIO_ODR_OFFSET)
+#define GPIOB_BSRR     (GPIOB_BASE + GPIO_BSRR_OFFSET)
+#define GPIOB_AFRL     (GPIOB_BASE + GPIO_AFRL_OFFSET)
+#define GPIOB_AFRH     (GPIOB_BASE + GPIO_AFRH_OFFSET)
 
 // **************************************************
 //      Port F Registers
 // **************************************************
 
-#define GPIOF_MODER    (GPIOF_BASE + MODER_OFFSET)
-#define GPIOF_OTYPER   (GPIOF_BASE + OTYPER_OFFSET)
-#define GPIOF_OSPEEDR  (GPIOF_BASE + OSPEEDR_OFFSET)
-#define GPIOF_PUPDR    (GPIOF_BASE + PUPDR_OFFSET)
-#define GPIOF_IDR      (GPIOF_BASE + IDR_OFFSET)
-#define GPIOF_ODR      (GPIOF_BASE + ODR_OFFSET)
-#define GPIOF_BSRR     (GPIOF_BASE + BSRR_OFFSET)
-#define GPIOF_AFRL     (GPIOF_BASE + AFLR_OFFSET)
-#define GPIOF_AFRH     (GPIOF_BASE + AFLH_OFFSET)
+#define GPIOF_MODER    (GPIOF_BASE + GPIO_MODER_OFFSET)
+#define GPIOF_OTYPER   (GPIOF_BASE + GPIO_OTYPER_OFFSET)
+#define GPIOF_OSPEEDR  (GPIOF_BASE + GPIO_OSPEEDR_OFFSET)
+#define GPIOF_PUPDR    (GPIOF_BASE + GPIO_PUPDR_OFFSET)
+#define GPIOF_IDR      (GPIOF_BASE + GPIO_IDR_OFFSET)
+#define GPIOF_ODR      (GPIOF_BASE + GPIO_ODR_OFFSET)
+#define GPIOF_BSRR     (GPIOF_BASE + GPIO_BSRR_OFFSET)
+#define GPIOF_AFRL     (GPIOF_BASE + GPIO_AFRL_OFFSET)
+#define GPIOF_AFRH     (GPIOF_BASE + GPIO_AFRH_OFFSET)
 
 // ****************************************************************************************************
 //                      RCC (Reset and Clock Control) (AHB1) - RM Section 7

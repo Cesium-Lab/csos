@@ -29,17 +29,24 @@ int pin_valid(uint32_t port, uint32_t pin) {
 //                  Setup
 // ****************************************************************************************************
 
-// int gpio_init(uint32_t port) {
-//     switch (port) {
-//         case GPIO_PORTA:
-//             clock_enable(port)
-//             return 1;
-//     }
+int gpio_init(uint32_t port) {
 
 
-//     if (port <= GPIO_PORTB || port == GPIO_PORTF)
-//         clock_enable(port)
-// }
+    switch (port) {
+        case GPIO_PORTA:
+            clock_set(RCC_AHBENR, RCC_AHB_A_EN, 1);
+            return 1;
+        case GPIO_PORTB:
+            clock_set(RCC_AHBENR, RCC_AHB_B_EN, 1);
+            return 1;
+        case GPIO_PORTF:
+            clock_set(RCC_AHBENR, RCC_AHB_F_EN, 1);
+            return 1;
+    }
+
+    // Unhandled port
+    return -1;
+}
 
 int gpio_set_mode(uint32_t port, uint32_t pin, uint32_t mode) {
     // RM p. 158

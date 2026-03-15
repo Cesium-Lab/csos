@@ -2,7 +2,7 @@
 #include "stm32f042-pins.h"
 
 
-void clock_enable(uint32_t reg, uint32_t clock, uint32_t state) {
+void clock_set(uint32_t reg, uint32_t clock, uint32_t state) {
     uint32_t value;
 
     value = GET32(reg);
