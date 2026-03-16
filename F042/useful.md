@@ -11,3 +11,5 @@ Reference Manual
   - 6 - Reset and Clock Control (RCC) p.95-137
   - 8 - GPIO p.149-165
   - 8 - SYSCFG p.166-187
+
+`arm-none-eabi-nm -S --size-sort build/hello.elf`
