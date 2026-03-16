@@ -15,7 +15,7 @@ SRC += hal/device-drivers/clock.c
 SRC += hal/device-drivers/gpio.c
 SRC += hal/device-drivers/uart.c
 
-SRC += libc/print-utils.c
+SRC += libc/print.c
 
 
 # Target

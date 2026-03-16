@@ -38,7 +38,7 @@
 080006da <uart_has_data>:
 08000708 <uart_get8>:
 
-# print-utils.c
+# print.c
 0800072c <print_begin>:
 0800077c <emit_num>:
 08000890 <printk>:

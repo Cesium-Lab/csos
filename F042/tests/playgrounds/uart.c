@@ -2,7 +2,7 @@
 
 #include "hal/stm32f042-pins.h"
 #include "stm32.h"
-#include "libc/print-utils.h"
+#include "libc/print.h"
 
 uart_t* uart = &UART2;
 

@@ -19,12 +19,12 @@ Supports formats
 
 - d for int32_t or less
 - u for uint32_t or less
-// - b for binary
+- b for binary
 - c for char
-// - x for lowercase hex
-// - X for uppercase hex
-// - 0x for lowercase hex with '0x'
-// - 0X for uppercase hex with '0x'
+- x for lowercase hex
+- X for uppercase hex
+- 0x for lowercase hex with '0x'
+- 0X for uppercase hex with '0x'
 
 - s or S for cstring
 - % for escaping 
@@ -33,7 +33,6 @@ Will support:
 - f for floats
 
 */
-
 int printk(const char *fmt, ...);
 
 int vprintk(const char* chars, va_list format);
