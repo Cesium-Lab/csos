@@ -15,14 +15,14 @@ int pin_valid(uint32_t port, uint32_t pin) {
     // Handles ports A and B
     if (port <= GPIO_PORTB)
         if (pin <= PB15) // Could also use PA15
-            return 1;
+            return STM32_SUCCESS;
 
     // Handles port F
     if (port == GPIO_PORTF)
         if (pin <= PF1)
-            return 1;
+            return STM32_SUCCESS;
     
-    return -1;
+    return STM32_ERROR;
 }
 
 // ****************************************************************************************************
@@ -31,27 +31,27 @@ int pin_valid(uint32_t port, uint32_t pin) {
 
 int gpio_init(uint32_t port) {
 
-
+    // RM p.
     switch (port) {
         case GPIO_PORTA:
             clock_set(RCC_AHBENR, RCC_AHB_A_EN, 1);
-            return 1;
+            return STM32_SUCCESS;
         case GPIO_PORTB:
             clock_set(RCC_AHBENR, RCC_AHB_B_EN, 1);
-            return 1;
+            return STM32_SUCCESS;
         case GPIO_PORTF:
             clock_set(RCC_AHBENR, RCC_AHB_F_EN, 1);
-            return 1;
+            return STM32_SUCCESS;
     }
 
     // Unhandled port
-    return -1;
+    return STM32_ERROR;
 }
 
 int gpio_set_mode(uint32_t port, uint32_t pin, uint32_t mode) {
     // RM p. 158
-    if (pin_valid(port, pin) < 0) return -1;
-    if (mode & ~0b11) return -1; // Must be only in the lowest 2 bits
+    if (pin_valid(port, pin) < 0) return STM32_ERROR;
+    if (mode & ~0b11) return STM32_ERROR; // Must be only in the lowest 2 bits
         
 
     // Each port is spaced out by 0x400
@@ -64,7 +64,7 @@ int gpio_set_mode(uint32_t port, uint32_t pin, uint32_t mode) {
 
     PUT32(addr, value);
 
-    return 1;
+    return STM32_SUCCESS;
 }
 
 int gpio_set_output(uint32_t port, uint32_t pin) {
@@ -79,8 +79,8 @@ int gpio_set_analog(uint32_t port, uint32_t pin) {
 
 int gpio_set_alt(uint32_t port, uint32_t pin, uint32_t alt_function) {
     // RM p. 162
-    if (pin_valid(port, pin) < 0) return -1;
-    if (alt_function > 0b0111) return -1;
+    if (pin_valid(port, pin) < 0) return STM32_ERROR;
+    if (alt_function > 0b0111) return STM32_ERROR;
 
     // Pin validity already handled above
     gpio_set_mode(port, pin, GPIO_PIN_MODE_ALT);
@@ -96,7 +96,7 @@ int gpio_set_alt(uint32_t port, uint32_t pin, uint32_t alt_function) {
 
     PUT32(addr, value);
 
-    return 1;
+    return STM32_SUCCESS;
 }
 
 // ****************************************************************************************************
@@ -105,7 +105,7 @@ int gpio_set_alt(uint32_t port, uint32_t pin, uint32_t alt_function) {
 
 int gpio_write(uint32_t port, uint32_t pin, uint32_t v) {
     // RM p. 161
-    if(pin_valid(port, pin) < 0) return -1;
+    if(pin_valid(port, pin) < 0) return STM32_ERROR;
 
     uint32_t addr = (uint32_t)GPIOA_BSRR + (0x400 * port);
 
@@ -113,7 +113,7 @@ int gpio_write(uint32_t port, uint32_t pin, uint32_t v) {
     uint32_t val = 1 << (pin + (!v)*16);
     PUT32(addr, val);
 
-    return 1;
+    return STM32_SUCCESS;
 }
 
 int gpio_write_on(uint32_t port, uint32_t pin) {
@@ -128,7 +128,7 @@ int gpio_write_off(uint32_t port, uint32_t pin) {
 
 int gpio_read(uint32_t port, uint32_t pin) {
     // RM p. 161
-    if(pin_valid(port, pin < 0)) return -1;
+    if(pin_valid(port, pin < 0)) return STM32_ERROR;
 
     uint32_t addr = (uint32_t)GPIOA_IDR + (0x400 * port);
 

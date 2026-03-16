@@ -6,13 +6,27 @@ OBJCOPY = arm-none-eabi-objcopy
 OBJDUMP = arm-none-eabi-objdump
 SIZE    = arm-none-eabi-size
 
+TTYACM ?= /dev/cu.usbmodem103 
+BAUD   ?= 115200
+
+# Source
+SRC = startup.s
+SRC += hal/device-drivers/clock.c
+SRC += hal/device-drivers/gpio.c
+SRC += hal/device-drivers/uart.c
+
+SRC += libc/print-utils.c
+
+
 # Target
 TARGET  = hello
 
-SRC     = main.c \
-		  hal/device-drivers/clock.c \
-		  hal/device-drivers/gpio.c \
-		  startup.s
+
+
+
+# Playgrounds
+SRC += tests/playgrounds/uart.c
+# SRC += tests/playgrounds/gpio.c
 
 LD      = linker.ld
 
@@ -22,6 +36,7 @@ BUILD_DIR = build
 # Flags
 CFLAGS  = -mcpu=cortex-m0 -mthumb -Wall -O0 -g -ffreestanding  -I. -Ihal -Iinclude -Ihal/device-drivers
 LDFLAGS = -T$(LD) -nostartfiles -Wl,-Map=$(BUILD_DIR)/$(TARGET).map
+TTYUSB = /dev/ttyUSB0
 
 # Default target
 all: $(BUILD_DIR)/$(TARGET).elf \
@@ -58,5 +73,10 @@ reset:
 	st-flash reset
 
 run: all flash
+
+serial:
+	echo "Press Ctrl+A Ctrl+D to exit"s
+	sleep 0.5
+	screen $(TTYACM) $(BAUD)
 
 .PHONY: all clean
