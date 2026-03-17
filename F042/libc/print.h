@@ -29,7 +29,7 @@ Supports formats
 - s or S for cstring
 - % for escaping 
 
-Will support:
+Will support in the future:
 - f for floats
 
 */

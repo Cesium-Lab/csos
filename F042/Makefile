@@ -6,7 +6,7 @@ OBJCOPY = arm-none-eabi-objcopy
 OBJDUMP = arm-none-eabi-objdump
 SIZE    = arm-none-eabi-size
 
-TTYACM ?= /dev/cu.usbmodem103 
+TTYACM ?= /dev/cu.usbmodem1103 
 BAUD   ?= 115200
 
 # Source
@@ -25,7 +25,8 @@ TARGET  = hello
 
 
 # Playgrounds
-SRC += tests/playgrounds/uart.c
+# SRC += tests/playgrounds/uart.c
+SRC += tests/playgrounds/printk-test.c
 # SRC += tests/playgrounds/gpio.c
 
 LD      = linker.ld

@@ -2,6 +2,7 @@
 
 #include "uart.h"
 #include "gpio.h"
+#include "libc/print.h"
 
 uart_t UART1;
 uart_t UART2;
@@ -87,10 +88,18 @@ int uart_begin(uart_t* uart) {
     // ----- ENABLE EVERYTHING -----
     val = GET32(uart->base_reg + UART_CR1_OFFSET);
     val |= UART_CR1_RE; // Enable Receiver
+    // val |= UART_CR1_RXNEIE; // Enable Receiver Interrupt
     val |= UART_CR1_TE; // Enable Transmitter
+    // val |= UART_CR1_TXEIE; // Enable Transmitter Interrupt
     PUT32(uart->base_reg + UART_CR1_OFFSET, val);
     val |= UART_CR1_UE; // Enable UART
     PUT32(uart->base_reg + UART_CR1_OFFSET, val);
+
+
+    // Clear any error flags
+    PUT32(uart->base_reg + UART_ICR_OFFSET, 
+          UART_ICR_FECF | UART_ICR_ORECF | UART_ICR_PECF);
+    
 
     // TODO: wait for ack?
     return STM32_SUCCESS;
@@ -141,6 +150,7 @@ int uart_has_data(uart_t* uart) {
     uint32_t val = GET32(uart->base_reg + UART_ISR_OFFSET);
     if ((val & UART_ISR_RXNE) == UART_ISR_RXNE)
         return 1;
+
     
     return 0;
 }
